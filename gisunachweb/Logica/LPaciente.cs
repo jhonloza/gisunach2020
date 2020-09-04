@@ -124,5 +124,34 @@ namespace gisunachweb.Logica
             conexion.desconectar();
             return listado;
         }
+        public Paciente obtenerPacienteCoord(double x, double y, string cedula)
+        {
+            Paciente oPaciente = new Paciente();
+            conexion = new conectorpg();
+            conexion.conectar();
+            conexion.crearComandoStringSql("SELECT id, ST_GeometryType(geom), x, y, nombres, apellidos, fechanac, direccion, cedula, telfconv, celular, correoelec, sexo FROM public.pacientes WHERE cedula=@p1;");
+            conexion.AsignarParametro("@p1", cedula);
+            NpgsqlDataReader datos = conexion.EjecutarConsulta();
+            while (datos.Read())
+            {
+                oPaciente = new Paciente();
+                oPaciente.id = Convert.ToInt32(datos.GetValue(0));
+                oPaciente.geometry = Convert.ToString(datos.GetValue(1));
+                oPaciente.x = Convert.ToDouble(datos.GetValue(2));
+                oPaciente.y = Convert.ToDouble(datos.GetValue(3));
+                oPaciente.nombres = Convert.ToString(datos.GetValue(4));
+                oPaciente.apellidos = Convert.ToString(datos.GetValue(5));
+                oPaciente.fechanac = Convert.ToDateTime(datos.GetValue(6));
+                oPaciente.direccion = Convert.ToString(datos.GetValue(7));
+                oPaciente.cedula = Convert.ToString(datos.GetValue(8));
+                oPaciente.telfconv = Convert.ToString(datos.GetValue(9));
+                oPaciente.celular = Convert.ToString(datos.GetValue(10));
+                oPaciente.correoelec = Convert.ToString(datos.GetValue(11));
+                oPaciente.sexo = Convert.ToString(datos.GetValue(12));
+            }
+            datos.Close();
+            conexion.desconectar();
+            return oPaciente;
+        }
     }
 }

@@ -44,5 +44,10 @@ namespace gisunachweb
         {
             return lpaciente.listarPacientes();
         }
+        [WebMethod]
+        public Paciente ObtenerPacienteCoor(double x, double y, string cedula)
+        {
+            return lpaciente.obtenerPacienteCoord(x, y, cedula);
+        }
     }
 }
